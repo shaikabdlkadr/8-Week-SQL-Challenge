@@ -15,3 +15,6 @@ JOIN dannys_diner.menu AS m
     ON s.product_id = m.product_id
 GROUP BY s.customer_id
 ORDER BY 1 ASC;
+
+-- 2. How many days has each customer visited the restaurant?
+
