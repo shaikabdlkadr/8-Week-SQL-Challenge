@@ -150,8 +150,7 @@ WITH customers_data AS (
         ON s.product_id = m.product_id
 )
 
-SELECT *, CASE
-    WHEN member_status = 'N' then NULL
-    ELSE RANK () OVER (PARTITION BY customer_id, member_status ORDER BY order_date)
-    END AS ranking
+SELECT *, CASE WHEN member_status = 'N' then NULL
+  ELSE RANK () OVER (PARTITION BY customer_id, member_status ORDER BY order_date)
+  END AS ranking
 FROM customers_data;
