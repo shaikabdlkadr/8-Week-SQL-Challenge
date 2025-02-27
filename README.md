@@ -13,8 +13,9 @@ The repository is organized as follows:
 
 Each **week folder** contains:  
 - **`Case_Study.md`** → Describes the business case and insights gained.  
-- **`.sql` files** → Contains SQL queries used to solve the case study.  
+- **`Queries.sql` files** → Contains SQL queries used to solve the case study.  
 - **`ER_Digram.png` files** → Table relation diagram of the case study.
+- **`Schema.sql` files** → Table creation and record insertions were updated here to setup the tables for practicing.
 
 ---
 
