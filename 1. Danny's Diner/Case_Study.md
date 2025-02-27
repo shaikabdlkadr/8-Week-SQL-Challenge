@@ -1,3 +1,9 @@
+# The given tables are - 
+
+    - Sales → Customer_id, Order_data and Product_id
+    - Menu → Product_name, Product_id
+    - Members → Customer_id, Join_date
+
 # Each of the following case study questions can be answered using a single SQL statement:
 
 * What is the total amount each customer spent at the restaurant?
