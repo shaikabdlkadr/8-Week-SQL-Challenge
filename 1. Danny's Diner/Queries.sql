@@ -107,12 +107,51 @@ ORDER BY 1;
 
 -- 8. What is the total items and amount spent for each member before they became a member?
 
+SELECT mem.customer_id, COUNT(s.product_id) AS total_Items, SUM(m.price) AS total_Sales
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+  ON s.product_id = m.product_id
+JOIN dannys_diner.members AS mem
+  ON s.customer_id = mem.customer_id
+  AND s.order_date < mem.join_date
+GROUP BY 1 ORDER BY 1;
 
 
 -- 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier — how many points would each customer have?
 
+WITH pts_agg AS (
+  SELECT s.customer_id, SUM(m.price) AS sales,
+    CASE WHEN s.product_id = 1 THEN (2 * SUM(m.price * 10))
+    ELSE SUM(m.price * 10)
+    END AS pts
+  FROM dannys_diner.sales AS s
+  JOIN dannys_diner.menu AS m
+    ON s.product_id = m.product_id
+  LEFT JOIN dannys_diner.members AS mem
+    ON s.customer_id = mem.customer_id
+  GROUP BY 1, s.product_id
+)
 
--- 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi — how many points do customer A and B have at the end of January?
+SELECT customer_id, SUM(pts) AS points
+FROM pts_agg
+GROUP BY 1;
+
+
+-- 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items,
+-- not just sushi — how many points do customer A and B have at the end of January?
+
+SELECT s.customer_id, SUM(CASE
+    WHEN m.product_name = 'sushi' THEN 2 * 10 * m.price
+    WHEN s.order_date BETWEEN mem.join_date AND mem.join_date + 6 THEN 2 * 10 * m.price
+    ELSE 10 * m.price END) AS pts
+FROM dannys_diner.sales AS s
+JOIN dannys_diner.menu AS m
+  ON s.product_id = m.product_id
+JOIN dannys_diner.members AS mem
+  ON s.customer_id = mem.customer_id
+  AND s.order_date >= mem.join_date
+  AND s.order_date < '2021-01-31' :: DATE
+GROUP BY 1;
 
 
 -- Bonus Questions
