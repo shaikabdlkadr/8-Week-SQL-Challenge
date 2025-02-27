@@ -1,8 +1,8 @@
 # The given tables are - 
 
-    - Sales → Customer_id, Order_data and Product_id
-    - Menu → Product_name, Product_id
-    - Members → Customer_id, Join_date
+ - Sales Table → Customer_id, Order_data and Product_id
+ - Menu Table → Product_id, Product_name, price
+ - Members Table → Customer_id, Join_date
 
 # Each of the following case study questions can be answered using a single SQL statement:
 
