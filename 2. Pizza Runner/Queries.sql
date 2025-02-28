@@ -1,28 +1,45 @@
 SET search_path = pizza_runner;
 
 
-SELECT * FROM customer_orders;
+SELECT * FROM pizza_runner.customer_orders;
 
-SELECT * FROM pizza_names;
+SELECT * FROM pizza_runner.pizza_names;
 
-SELECT * FROM pizza_recipes;
+SELECT * FROM pizza_runner.pizza_recipes;
 
-SELECT * FROM pizza_toppings;
+SELECT * FROM pizza_runner.pizza_toppings;
 
-SELECT * FROM runner_orders;
+SELECT * FROM pizza_runner.runner_orders;
 
-SELECT * FROM runners;
+SELECT * FROM pizza_runner.runners;
 
 
 -- A : Pizza Metrics
 
 -- How many pizzas were ordered?
 
+SELECT COUNT(*) AS pizza_order
+FROM pizza_runner.customer_orders;
 
 -- How many unique customer orders were made?
 
+SELECT COUNT(DISTINCT(order_id)) AS unique_customer_order
+FROM pizza_runner.customer_orders;
 
 -- How many successful orders were delivered by each runner?
+
+-- Used to find the distinct cancellation messages from the runner_orders table
+SELECT DISTINCT cancellation
+FROM pizza_runner.runner_orders;
+
+
+SELECT runner_id, COUNT(order_id) AS successful_orders
+FROM pizza_runner.runner_orders
+WHERE 
+  (TRIM(TRAILING 'km' FROM distance) ~ '^[0-9]+(\.[0-9]+)?$' -- Check if distance is a valid number
+   AND TRIM(TRAILING 'km' FROM distance) :: NUMERIC > 0)  
+  OR distance NOT IN ('null', NULL)  -- Exclude string 'null' and 'NULL'
+GROUP BY 1;
 
 
 -- How many of each type of pizza was delivered?
