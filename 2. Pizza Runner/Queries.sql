@@ -41,12 +41,27 @@ WHERE
   OR distance NOT IN ('null', NULL)  -- Exclude string 'null' and 'NULL'
 GROUP BY 1;
 
-
 -- How many of each type of pizza was delivered?
 
+SELECT DISTINCT pname.pizza_name, COUNT(co.pizza_id) AS count
+FROM pizza_runner.customer_orders co
+JOIN pizza_runner.runner_orders ro
+    ON co.order_id = ro.order_id
+JOIN pizza_runner.pizza_names pname
+    ON co.pizza_id = pname.pizza_id
+WHERE (TRIM(TRAILING 'km' FROM ro.distance) ~ '^[0-9]+(\.[0-9]+)?$' -- Check if distance is a valid number
+   AND TRIM(TRAILING 'km' FROM ro.distance) :: NUMERIC > 0)  
+  OR ro.distance NOT IN ('null', NULL)  -- Exclude string 'null' and 'NULL'
+GROUP BY 1;
 
 -- How many Vegetarian and Meatlovers were ordered by each customer?
 
+SELECT co.customer_id, COUNT(co.order_id) AS ord_count
+FROM pizza_runner.customer_orders co
+JOIN pizza_runner.pizza_names pname
+    ON co.pizza_id = pname.pizza_id
+WHERE pname.pizza_name IN ('Vegetarian', 'Meatlovers')
+GROUP BY 1
 
 -- What was the maximum number of pizzas delivered in a single order?
 
